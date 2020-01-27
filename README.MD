@@ -30,7 +30,7 @@ npm i --save @verzth/statisticjs
 
 2. Initialize Statistic object with params, it will use default value if you don't provide params.
    ```javascript
-   var tcx = new TCX({
+   var statistic = new Statistic({
     serverUrl : '',
     page : 'host',
     page_type : 'website',
