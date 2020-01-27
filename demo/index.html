@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../dist/js/statistic.bundle.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        $(function () {
+            var stats = new Statistic({
+                tcx : new TCX({
+                    url: "SERVER_HOST",
+                    app_id : "APP_ID",
+                    secret_key: "ABC123",
+                    public_key: "DEF456",
+                    auth: "none",
+                    master_key: "ABCDE12345"
+                })
+            });
+            stats.createContent().setAction("impression").setId(1).setCategory("image").send();
+        });
+    </script>
+</body>
+</html>
