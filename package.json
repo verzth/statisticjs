@@ -1,6 +1,6 @@
 {
   "name": "@verzth/statisticjs",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "statistic.js",
   "scripts": {
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/verzth/statisticjs#readme",
   "dependencies": {
-    "@verzth/tcx-js": "^1.0.0",
+    "@verzth/tcx-js": "^1.0.1",
     "crypto-js": "^3.1.9-1",
     "jquery": "^3.4.1"
   },
