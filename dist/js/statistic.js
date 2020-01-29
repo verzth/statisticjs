@@ -3,8 +3,8 @@
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function ($, hash, TCX) {
-  var $_VERSION = "0.0.1";
-  var $_BUILD = 1;
+  var $_VERSION = "1.1.0";
+  var $_BUILD = 2;
   var $_COOKIE_NAME = "verzth_stats";
   var $_SESSION_NAME = "verzth_sess";
   var $_ADS_IDENTIFICATION_NAME = 'verzth_pa';
@@ -405,6 +405,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       throw "TCX undefined, please give TCX to the statistic for authentication";
     }
 
+    var time = "",
+        timeParam = "";
+
+    if (this.tcx.getAuth() === this.tcx.AUTH_TIME) {
+      time = this.tcx.getTime();
+      timeParam = "?tcx_datetime=" + time;
+    }
+
     this.queueModel.push(this.model);
 
     switch (this.options.type) {
@@ -414,11 +422,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
             if (token) {
               $.ajax({
                 type: "POST",
-                url: this.options.apiUrl + "content",
+                url: this.options.apiUrl + "content" + timeParam,
                 headers: {
                   'X-TCX-Type': 'TWTC',
                   'X-TCX-App-Id': this.tcx.getAppID(),
-                  'X-TCX-App-Pass': this.tcx.getAppPass(),
+                  'X-TCX-App-Pass': this.tcx.getAppPass({
+                    tcx_datetime: time
+                  }),
                   'X-TCX-Token': hash.enc.Base64.stringify(hash.enc.Utf8.parse(token))
                 },
                 contentType: 'application/json',
@@ -438,11 +448,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
             if (token) {
               $.ajax({
                 type: "POST",
-                url: this.options.apiUrl + "content/bulk",
+                url: this.options.apiUrl + "content/bulk" + timeParam,
                 headers: {
                   'X-TCX-Type': 'TWTC',
                   'X-TCX-App-Id': this.tcx.getAppID(),
-                  'X-TCX-App-Pass': this.tcx.getAppPass(),
+                  'X-TCX-App-Pass': this.tcx.getAppPass({
+                    tcx_datetime: time
+                  }),
                   'X-TCX-Token': hash.enc.Base64.stringify(hash.enc.Utf8.parse(token))
                 },
                 contentType: 'application/json',
@@ -463,11 +475,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
             if (token) {
               $.ajax({
                 type: "POST",
-                url: this.options.apiUrl + "event",
+                url: this.options.apiUrl + "event" + timeParam,
                 headers: {
                   'X-TCX-Type': 'TWTC',
                   'X-TCX-App-Id': this.tcx.getAppID(),
-                  'X-TCX-App-Pass': this.tcx.getAppPass(),
+                  'X-TCX-App-Pass': this.tcx.getAppPass({
+                    tcx_datetime: time
+                  }),
                   'X-TCX-Token': hash.enc.Base64.stringify(hash.enc.Utf8.parse(token))
                 },
                 contentType: 'application/json',
@@ -487,11 +501,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
             if (token) {
               $.ajax({
                 type: "POST",
-                url: this.options.apiUrl + "hit",
+                url: this.options.apiUrl + "hit" + timeParam,
                 headers: {
                   'X-TCX-Type': 'TWTC',
                   'X-TCX-App-Id': this.tcx.getAppID(),
-                  'X-TCX-App-Pass': this.tcx.getAppPass(),
+                  'X-TCX-App-Pass': this.tcx.getAppPass({
+                    tcx_datetime: time
+                  }),
                   'X-TCX-Token': hash.enc.Base64.stringify(hash.enc.Utf8.parse(token))
                 },
                 contentType: 'application/json',

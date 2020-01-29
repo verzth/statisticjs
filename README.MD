@@ -1,6 +1,6 @@
 # statisticjs
 [![GitHub version](https://badge.fury.io/gh/verzth%2Fstatisticjs.svg)](https://badge.fury.io/gh/verzth%2Fstatisticjs)
-[![npm version](https://badge.fury.io/js/%40verzth%2Fstatisticjs.svg)](https://badge.fury.io/js/%40babel%2Fcore)
+[![npm version](https://badge.fury.io/js/%40verzth%2Fstatisticjs.svg)](https://badge.fury.io/js/%40verzth%2Fstatisticjs)
 
 Javascript Library for Statistic Engine, it use in client side to help make auth simpler.
 For Android SDK version can be found [here](https://github.com/amandjaja/statistic-android).
