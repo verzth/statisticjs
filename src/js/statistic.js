@@ -1,6 +1,6 @@
-(function ($,hash,TCX) {
-    var $_VERSION = "1.1.0";
-    var $_BUILD = 2;
+(function ($,hash) {
+    var $_VERSION = "0.0.1-a.1";
+    var $_BUILD = 1;
 
     var $_COOKIE_NAME = "verzth_stats";
     var $_SESSION_NAME = "verzth_sess";
@@ -9,15 +9,14 @@
     var $_ADS_SESSION_NAME = 'verzth_session';
 
     var $_KEY = "KTe2DztaUw";
-    var tcx = new TCX();
 
     this.Statistic = function () {
         var defaults = {
             serverUrl : "",
+            key: "",
             page : $(location).attr('host')===''?'unknown':$(location).attr('host'),
             page_type : "website",
             type : "hit",
-            tcx : null
         };
 
         this.model = null;
@@ -25,7 +24,7 @@
 
         if(arguments[0] && typeof arguments[0] === "object"){
             this.options = extendDefaults(defaults,arguments[0]);
-            this.options.apiUrl = this.options.serverUrl+'fig/';
+            this.options.apiUrl = this.options.serverUrl;
         }else this.options = defaults;
 
         this.tcx = this.options.tcx;
@@ -176,12 +175,14 @@
             age : null,
             gender : null,
             user_id : null,
-            carrier : "Statistic JS Libs v"+$_VERSION+"("+$_BUILD+")",
-            device_id : getIdentification(),
-            device_brand : navigator.appCodeName,
-            device_version : navigator.appVersion.substring(0, 4).trim(),
-            device_type : "Web",
-            device_os : navigator.platform,
+            carrier : "statisticjs:"+$_BUILD+":v"+$_VERSION,
+            device: {
+                id : getIdentification(),
+                brand : navigator.appCodeName,
+                version : navigator.appVersion.substring(0, 4).trim(),
+                type : "Web",
+                os : navigator.platform,
+            },
             longitude : null,
             latitude : null,
             attributes : {},
@@ -200,10 +201,6 @@
         this.options.type = "content";
         this.model = createModel.call(this);
 
-        Statistic.prototype.setId = function (id) {
-            this.model.id = id;
-            return this;
-        };
         Statistic.prototype.setType = function (type) {
             this.model.type = type;
             return this;
@@ -214,6 +211,10 @@
         };
         Statistic.prototype.setAction = function (action) {
             this.model.action = action;
+            return this;
+        };
+        Statistic.prototype.setId = function (id) {
+            this.model.cid = id;
             return this;
         };
         Statistic.prototype.setCallforward = function (link) {
@@ -239,10 +240,6 @@
 
                 return this;
             };
-            Statistic.prototype.setId = function (id) {
-                tempData.id = id;
-                return this;
-            };
             Statistic.prototype.setType = function (type) {
                 tempData.type = type;
                 return this;
@@ -253,6 +250,10 @@
             };
             Statistic.prototype.setAction = function (action) {
                 tempData.action = action;
+                return this;
+            };
+            Statistic.prototype.setId = function (id) {
+                tempData.cid = id;
                 return this;
             };
 
@@ -296,6 +297,10 @@
         this.options.type = "event";
         this.model = createModel.call(this);
 
+        Statistic.prototype.setType = function (type) {
+            this.model.type = type;
+            return this;
+        };
         Statistic.prototype.setCategory = function (category) {
             this.model.category = category;
             return this;
@@ -304,24 +309,24 @@
             this.model.name = name;
             return this;
         };
-        Statistic.prototype.setType = function (type) {
-            this.model.type = type;
-            return this;
-        };
         Statistic.prototype.setId = function (id) {
-            this.model.id = id;
+            this.model.cid = id;
             return this;
         };
-        Statistic.prototype.setSuccess = function (state) {
-            this.model.isSuccess = state || true;
+        Statistic.prototype.setOk = function (state) {
+            this.model.isOk = state || true;
             return this;
         };
-        Statistic.prototype.setRejectionCode = function (code) {
-            this.model.rejection_code = code;
+        Statistic.prototype.setStatus = function (status) {
+            this.model.status = status;
             return this;
         };
-        Statistic.prototype.setRejectionMessage = function (message) {
-            this.model.rejection_message = message;
+        Statistic.prototype.setStatusCode = function (code) {
+            this.model.status_code = code;
+            return this;
+        };
+        Statistic.prototype.setStatusMessage = function (message) {
+            this.model.status_message = message;
             return this;
         };
 
@@ -360,100 +365,60 @@
     };
 
     function send(){
-        if (this.tcx == null) {
-            throw "TCX undefined, please give TCX to the statistic for authentication"
-        }
-        var time = "", timeParam = "";
-        if(this.tcx.getAuth() === this.tcx.AUTH_TIME){
-            time = this.tcx.getTime();
-            timeParam="?tcx_datetime="+time;
-        }
         this.queueModel.push(this.model);
         switch (this.options.type){
             case "content":{
-                this.tcx.getToken(function (token) {
-                    if(token){
-                        $.ajax({
-                            type : "POST",
-                            url : this.options.apiUrl+"content"+timeParam,
-                            headers : {
-                                'X-TCX-Type': 'TWTC',
-                                'X-TCX-App-Id': this.tcx.getAppID(),
-                                'X-TCX-App-Pass': this.tcx.getAppPass({tcx_datetime:time}),
-                                'X-TCX-Token': hash.enc.Base64.stringify(hash.enc.Utf8.parse(token))
-                            },
-                            contentType : 'application/json',
-                            dataType : 'json',
-                            data : JSON.stringify(this.queueModel.pop())
-                        });
-                    }else{
-                        throw "Authorization Failed TCX"
-                    }
-                }.bind(this));
+                $.ajax({
+                    type : "POST",
+                    url : this.options.apiUrl+"content",
+                    headers : {
+                        'Authorization': 'Basic '+btoa(this.options.key+":"),
+                        'Accept': 'application/json',
+                    },
+                    contentType : 'application/json',
+                    dataType : 'json',
+                    data : JSON.stringify(this.queueModel.pop())
+                });
             }break;
             case "content_bulk":{
-                this.tcx.getToken(function (token) {
-                    if(token){
-                        $.ajax({
-                            type : "POST",
-                            url : this.options.apiUrl+"content/bulk"+timeParam,
-                            headers : {
-                                'X-TCX-Type': 'TWTC',
-                                'X-TCX-App-Id': this.tcx.getAppID(),
-                                'X-TCX-App-Pass': this.tcx.getAppPass({tcx_datetime:time}),
-                                'X-TCX-Token': hash.enc.Base64.stringify(hash.enc.Utf8.parse(token))
-                            },
-                            contentType : 'application/json',
-                            dataType : 'json',
-                            data : JSON.stringify(this.queueModel.pop())
-                        });
-                    }else{
-                        throw "Authorization Failed TCX"
-                    }
-                }.bind(this));
+                $.ajax({
+                    type : "POST",
+                    url : this.options.apiUrl+"content/bulk",
+                    headers : {
+                        'Authorization': 'Basic '+btoa(this.options.key+":"),
+                        'Accept': 'application/json',
+                    },
+                    contentType : 'application/json',
+                    dataType : 'json',
+                    data : JSON.stringify(this.queueModel.pop())
+                });
                 this.clearContent();
             }break;
             case "event":{
-                this.tcx.getToken(function (token) {
-                    if(token){
-                        $.ajax({
-                            type : "POST",
-                            url : this.options.apiUrl+"event"+timeParam,
-                            headers : {
-                                'X-TCX-Type': 'TWTC',
-                                'X-TCX-App-Id': this.tcx.getAppID(),
-                                'X-TCX-App-Pass': this.tcx.getAppPass({tcx_datetime:time}),
-                                'X-TCX-Token': hash.enc.Base64.stringify(hash.enc.Utf8.parse(token))
-                            },
-                            contentType : 'application/json',
-                            dataType : 'json',
-                            data : JSON.stringify(this.queueModel.pop())
-                        });
-                    }else{
-                        throw "Authorization Failed TCX"
-                    }
-                }.bind(this));
+                $.ajax({
+                    type : "POST",
+                    url : this.options.apiUrl+"event",
+                    headers : {
+                        'Authorization': 'Basic '+btoa(this.options.key+":"),
+                        'Accept': 'application/json',
+                    },
+                    contentType : 'application/json',
+                    dataType : 'json',
+                    data : JSON.stringify(this.queueModel.pop())
+                });
             }break;
             default:{
-                this.tcx.getToken(function (token) {
-                    if(token){
-                        $.ajax({
-                            type : "POST",
-                            url : this.options.apiUrl+"hit"+timeParam,
-                            headers : {
-                                'X-TCX-Type': 'TWTC',
-                                'X-TCX-App-Id': this.tcx.getAppID(),
-                                'X-TCX-App-Pass': this.tcx.getAppPass({tcx_datetime:time}),
-                                'X-TCX-Token': hash.enc.Base64.stringify(hash.enc.Utf8.parse(token))
-                            },
-                            contentType : 'application/json',
-                            dataType : 'json',
-                            data : JSON.stringify(this.queueModel.pop())
-                        });
-                    }else{
-                        throw "Authorization Failed TCX"
-                    }
-                }.bind(this));
+                $.ajax({
+                    type : "POST",
+                    url : this.options.apiUrl+"hit",
+                    headers : {
+                        'Authorization': 'Basic '+btoa(this.options.key+":"),
+                        'Accept': 'application/json',
+                    },
+                    contentType : 'application/json',
+                    dataType : 'json',
+                    data : JSON.stringify(this.queueModel.pop())
+                });
             }
         }
     }
@@ -472,4 +437,4 @@
             send.call(parent);
         }
     };
-}(jQuery,CryptoJS,TCX));
+}(jQuery,CryptoJS));

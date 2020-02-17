@@ -8,7 +8,7 @@
     "build:js": "npm-run-all build:js:*",
     "build:js:pure": "babel src/js -d dist/js",
     "build:js:minify": "uglifyjs dist/js/statistic.js -c -m -e -o dist/js/statistic.min.js",
-    "build:js:bundle": "uglifyjs node_modules/@verzth/tcx-js/tcx.bundle.js dist/js/statistic.js -c -m -e -o dist/js/statistic.bundle.js"
+    "build:js:bundle": "uglifyjs node_modules/crypto-js/crypto-js.js dist/js/statistic.js -c -m -e -o dist/js/statistic.bundle.js"
   },
   "repository": {
     "type": "git",
@@ -29,15 +29,14 @@
   },
   "homepage": "https://github.com/verzth/statisticjs#readme",
   "dependencies": {
-    "@verzth/tcx-js": "^1.1.0",
-    "crypto-js": "^3.1.9-1",
+    "crypto-js": "^3.3.0",
     "jquery": "^3.4.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.3",
-    "@babel/core": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
     "npm-run-all": "^4.1.5",
-    "uglify-js": "^3.7.6"
+    "uglify-js": "^3.7.7"
   }
 }
