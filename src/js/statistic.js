@@ -1,6 +1,6 @@
 (function ($,hash) {
-    var $_VERSION = "2.0.0-alpha05";
-    var $_BUILD = 5;
+    var $_VERSION = "2.0.0-alpha06";
+    var $_BUILD = 6;
 
     var $_COOKIE_NAME = "verzth_stats";
     var $_SESSION_NAME = "verzth_sess";
@@ -487,7 +487,7 @@
                         dataType : 'json',
                         data : JSON.stringify(this.queueModel.pop())
                     });
-                    this.clearContent();
+                    this.clearData();
                 }break;
                 case "event":{
                     $.ajax({
@@ -514,7 +514,7 @@
                         dataType : 'json',
                         data : JSON.stringify(this.queueModel.pop())
                     });
-                    this.clearEvent();
+                    this.clearData();
                 }break;
                 default:{
                     $.ajax({
