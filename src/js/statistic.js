@@ -1,6 +1,6 @@
 (function ($,hash) {
-    var $_VERSION = "0.0.1-a.1";
-    var $_BUILD = 1;
+    var $_VERSION = "2.0.0-alpha03";
+    var $_BUILD = 3;
 
     var $_COOKIE_NAME = "verzth_stats";
     var $_SESSION_NAME = "verzth_sess";
@@ -258,6 +258,7 @@
             };
 
             Statistic.prototype.commit = function () {
+                delete Statistic.prototype.addContent;
                 delete Statistic.prototype.setId;
                 delete Statistic.prototype.setType;
                 delete Statistic.prototype.setCategory;
@@ -284,15 +285,17 @@
 
         delete Statistic.prototype.putCustom;
 
+        Statistic.prototype.isContentAvailable = function () {
+            return this.model!==null;
+        };
+        Statistic.prototype.clearContent = function () {
+            this.model=null;
+        };
+
         return this;
     };
-    Statistic.prototype.isContentAvailable = function () {
-        return this.model!==null;
-    };
-    Statistic.prototype.clearContent = function () {
-        this.model=null;
-    };
 
+    // EVENT SINGLE
     Statistic.prototype.createEvent = function() {
         this.options.type = "event";
         this.model = createModel.call(this);
@@ -333,6 +336,96 @@
         return this;
     };
 
+    //EVENT BULK
+    Statistic.prototype.makeEvent = function() {
+        if(this.model===null){
+            this.options.type = "event_bulk";
+            this.model = createModel.call(this);
+            this.model.data = [];
+        }
+
+        Statistic.prototype.addEvent = function () {
+            var tempData = {isInteraction : false,attributes:{}};
+            Statistic.prototype.putCustom = function (name,value) {
+                tempData.attributes[name] = value;
+
+                return this;
+            };
+            Statistic.prototype.setType = function (type) {
+                tempData.type = type;
+                return this;
+            };
+            Statistic.prototype.setCategory = function (category) {
+                tempData.category = category;
+                return this;
+            };
+            Statistic.prototype.setName = function (name) {
+                tempData.name = name;
+                return this;
+            };
+            Statistic.prototype.setId = function (id) {
+                tempData.cid = id;
+                return this;
+            };
+            Statistic.prototype.setOk = function () {
+                tempData.isOk = arguments[0] || true;
+                return this;
+            };
+            Statistic.prototype.setStatus = function (status) {
+                tempData.status = status;
+                return this;
+            };
+            Statistic.prototype.setStatusCode = function (code) {
+                tempData.status_code = code;
+                return this;
+            };
+            Statistic.prototype.setStatusMessage = function (message) {
+                tempData.status_message = message;
+                return this;
+            };
+
+            Statistic.prototype.commit = function () {
+                delete Statistic.prototype.addEvent;
+                delete Statistic.prototype.setId;
+                delete Statistic.prototype.setType;
+                delete Statistic.prototype.setCategory;
+                delete Statistic.prototype.setName;
+                delete Statistic.prototype.setOk;
+                delete Statistic.prototype.setStatus;
+                delete Statistic.prototype.setStatusCode;
+                delete Statistic.prototype.setStatusMessage;
+
+                this.model.data.push(tempData);
+
+                delete Statistic.prototype.commit;
+                Statistic.prototype.putCustom = function (name,value) {
+                    this.model.attributes[name]=value;
+
+                    return this;
+                };
+                return this;
+            };
+
+            return this;
+        };
+
+        Statistic.prototype.setCallforward = function (link) {
+            this.model.callforward = link;
+            return this;
+        };
+
+        delete Statistic.prototype.putCustom;
+
+        Statistic.prototype.isEventAvailable = function () {
+            return this.model!==null;
+        };
+        Statistic.prototype.clearEvent = function () {
+            this.model=null;
+        };
+
+        return this;
+    };
+
     Statistic.prototype.setPage = function (name) {
         this.model.page = name;
         return this;
@@ -365,60 +458,76 @@
     };
 
     function send(){
-        this.queueModel.push(this.model);
-        switch (this.options.type){
-            case "content":{
-                $.ajax({
-                    type : "POST",
-                    url : this.options.apiUrl+"content",
-                    headers : {
-                        'Authorization': 'Basic '+btoa(this.options.key+":"),
-                        'Accept': 'application/json',
-                    },
-                    contentType : 'application/json',
-                    dataType : 'json',
-                    data : JSON.stringify(this.queueModel.pop())
-                });
-            }break;
-            case "content_bulk":{
-                $.ajax({
-                    type : "POST",
-                    url : this.options.apiUrl+"content/bulk",
-                    headers : {
-                        'Authorization': 'Basic '+btoa(this.options.key+":"),
-                        'Accept': 'application/json',
-                    },
-                    contentType : 'application/json',
-                    dataType : 'json',
-                    data : JSON.stringify(this.queueModel.pop())
-                });
-                this.clearContent();
-            }break;
-            case "event":{
-                $.ajax({
-                    type : "POST",
-                    url : this.options.apiUrl+"event",
-                    headers : {
-                        'Authorization': 'Basic '+btoa(this.options.key+":"),
-                        'Accept': 'application/json',
-                    },
-                    contentType : 'application/json',
-                    dataType : 'json',
-                    data : JSON.stringify(this.queueModel.pop())
-                });
-            }break;
-            default:{
-                $.ajax({
-                    type : "POST",
-                    url : this.options.apiUrl+"hit",
-                    headers : {
-                        'Authorization': 'Basic '+btoa(this.options.key+":"),
-                        'Accept': 'application/json',
-                    },
-                    contentType : 'application/json',
-                    dataType : 'json',
-                    data : JSON.stringify(this.queueModel.pop())
-                });
+        if (this.model !== null){
+            this.queueModel.push(this.model);
+            switch (this.options.type){
+                case "content":{
+                    $.ajax({
+                        type : "POST",
+                        url : this.options.apiUrl+"content",
+                        headers : {
+                            'Authorization': 'Basic '+btoa(this.options.key+":"),
+                            'Accept': 'application/json',
+                        },
+                        contentType : 'application/json',
+                        dataType : 'json',
+                        data : JSON.stringify(this.queueModel.pop())
+                    });
+                }break;
+                case "content_bulk":{
+                    $.ajax({
+                        type : "POST",
+                        url : this.options.apiUrl+"content",
+                        headers : {
+                            'Authorization': 'Basic '+btoa(this.options.key+":"),
+                            'Accept': 'application/json',
+                        },
+                        contentType : 'application/json',
+                        dataType : 'json',
+                        data : JSON.stringify(this.queueModel.pop())
+                    });
+                    this.clearContent();
+                }break;
+                case "event":{
+                    $.ajax({
+                        type : "POST",
+                        url : this.options.apiUrl+"event",
+                        headers : {
+                            'Authorization': 'Basic '+btoa(this.options.key+":"),
+                            'Accept': 'application/json',
+                        },
+                        contentType : 'application/json',
+                        dataType : 'json',
+                        data : JSON.stringify(this.queueModel.pop())
+                    });
+                }break;
+                case "event_bulk":{
+                    $.ajax({
+                        type : "POST",
+                        url : this.options.apiUrl+"event",
+                        headers : {
+                            'Authorization': 'Basic '+btoa(this.options.key+":"),
+                            'Accept': 'application/json',
+                        },
+                        contentType : 'application/json',
+                        dataType : 'json',
+                        data : JSON.stringify(this.queueModel.pop())
+                    });
+                    this.clearEvent();
+                }break;
+                default:{
+                    $.ajax({
+                        type : "POST",
+                        url : this.options.apiUrl+"hit",
+                        headers : {
+                            'Authorization': 'Basic '+btoa(this.options.key+":"),
+                            'Accept': 'application/json',
+                        },
+                        contentType : 'application/json',
+                        dataType : 'json',
+                        data : JSON.stringify(this.queueModel.pop())
+                    });
+                }
             }
         }
     }
