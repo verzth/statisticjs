@@ -3,8 +3,8 @@
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function ($, hash) {
-  var $_VERSION = "2.0.0-alpha03";
-  var $_BUILD = 3;
+  var $_VERSION = "2.0.0-alpha04";
+  var $_BUILD = 4;
   var $_COOKIE_NAME = "verzth_stats";
   var $_SESSION_NAME = "verzth_sess";
   var $_ADS_IDENTIFICATION_NAME = 'verzth_pa';
@@ -210,6 +210,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     };
   }
 
+  Statistic.prototype.isModelAvailable = function () {
+    return this.model !== null;
+  };
+
+  Statistic.prototype.dismiss = function () {
+    this.model = null;
+  };
+
   Statistic.prototype.createHit = function () {
     this.options.type = "hit";
     this.model = createModel.call(this);
@@ -316,11 +324,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     delete Statistic.prototype.putCustom;
 
     Statistic.prototype.isContentAvailable = function () {
-      return this.model !== null;
+      return this.model.data.length > 0;
     };
 
     Statistic.prototype.clearContent = function () {
-      this.model = null;
+      this.model.data = [];
     };
 
     return this;
@@ -465,11 +473,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     delete Statistic.prototype.putCustom;
 
     Statistic.prototype.isEventAvailable = function () {
-      return this.model !== null;
+      return this.model.data.length > 0;
     };
 
     Statistic.prototype.clearEvent = function () {
-      this.model = null;
+      this.model.data = [];
     };
 
     return this;
