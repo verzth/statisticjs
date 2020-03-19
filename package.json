@@ -1,6 +1,6 @@
 {
   "name": "@verzth/statisticjs",
-  "version": "1.1.1",
+  "version": "2.0.0-alpha01",
   "description": "",
   "main": "statistic.js",
   "scripts": {
