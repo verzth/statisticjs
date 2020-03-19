@@ -479,7 +479,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   Statistic.prototype.send = function () {
     var parent = this;
 
-    if (navigator.geolocation) {
+    if (location.protocol === 'https:' && parent.model != null && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
         parent.model.longitude = position.coords.longitude;
         parent.model.latitude = position.coords.latitude;
