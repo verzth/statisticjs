@@ -3,8 +3,8 @@
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function ($, hash) {
-  var $_VERSION = "2.0.0-alpha06";
-  var $_BUILD = 6;
+  var $_VERSION = "2.0.0-alpha08";
+  var $_BUILD = 8;
   var $_COOKIE_NAME = "verzth_stats";
   var $_SESSION_NAME = "verzth_sess";
   var $_ADS_IDENTIFICATION_NAME = 'verzth_pa';
@@ -191,7 +191,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       token: str_rand(15),
       page: this.options.page,
       page_type: this.options.page_type,
-      isInteraction: false,
+      isInteraction: 0,
       age: null,
       gender: null,
       user_id: null,
@@ -267,7 +267,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
     Statistic.prototype.addContent = function () {
       var tempData = {
-        isInteraction: false,
+        isInteraction: 0,
         attributes: {}
       };
 
@@ -359,7 +359,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     };
 
     Statistic.prototype.setOk = function (state) {
-      this.model.isOk = state || true;
+      this.model.isOk = state || 1;
       return this;
     };
 
@@ -391,7 +391,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
     Statistic.prototype.addEvent = function () {
       var tempData = {
-        isInteraction: false,
+        isInteraction: 0,
         attributes: {}
       };
 
@@ -421,7 +421,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       };
 
       Statistic.prototype.setOk = function () {
-        tempData.isOk = arguments[0] || true;
+        tempData.isOk = arguments[0] || 1;
         return this;
       };
 
@@ -484,7 +484,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   };
 
   Statistic.prototype.setInteraction = function (state) {
-    this.model.isInteraction = state || false;
+    this.model.isInteraction = state || 0;
     return this;
   };
 

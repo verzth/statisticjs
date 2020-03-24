@@ -1,6 +1,6 @@
 (function ($,hash) {
-    var $_VERSION = "2.0.0-alpha06";
-    var $_BUILD = 6;
+    var $_VERSION = "2.0.0-alpha08";
+    var $_BUILD = 8;
 
     var $_COOKIE_NAME = "verzth_stats";
     var $_SESSION_NAME = "verzth_sess";
@@ -171,7 +171,7 @@
             token : str_rand(15),
             page : this.options.page,
             page_type : this.options.page_type,
-            isInteraction : false,
+            isInteraction : 0,
             age : null,
             gender : null,
             user_id : null,
@@ -242,7 +242,7 @@
         }
 
         Statistic.prototype.addContent = function () {
-            var tempData = {isInteraction : false,attributes:{}};
+            var tempData = {isInteraction : 0,attributes:{}};
             Statistic.prototype.putCustom = function (name,value) {
                 tempData.attributes[name] = value;
 
@@ -325,7 +325,7 @@
             return this;
         };
         Statistic.prototype.setOk = function (state) {
-            this.model.isOk = state || true;
+            this.model.isOk = state || 1;
             return this;
         };
         Statistic.prototype.setStatus = function (status) {
@@ -353,7 +353,7 @@
         }
 
         Statistic.prototype.addEvent = function () {
-            var tempData = {isInteraction : false,attributes:{}};
+            var tempData = {isInteraction : 0,attributes:{}};
             Statistic.prototype.putCustom = function (name,value) {
                 tempData.attributes[name] = value;
 
@@ -376,7 +376,7 @@
                 return this;
             };
             Statistic.prototype.setOk = function () {
-                tempData.isOk = arguments[0] || true;
+                tempData.isOk = arguments[0] || 1;
                 return this;
             };
             Statistic.prototype.setStatus = function (status) {
@@ -436,7 +436,7 @@
         return this;
     };
     Statistic.prototype.setInteraction = function (state) {
-        this.model.isInteraction = state||false;
+        this.model.isInteraction = state||0;
         return this;
     };
     Statistic.prototype.setAge = function (age) {

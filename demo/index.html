@@ -11,16 +11,14 @@
     <script type="text/javascript">
         $(function () {
             var stats = new Statistic({
-                tcx : new TCX({
-                    url: "SERVER_HOST",
-                    app_id : "APP_ID",
-                    secret_key: "ABC123",
-                    public_key: "DEF456",
-                    auth: "none",
-                    master_key: "ABCDE12345"
-                })
             });
-            stats.createContent().setAction("impression").setId(1).setCategory("image").send();
+            stats.createContent()
+                .setAction("impression")
+                .setId(1)
+                .setType("image")
+                .setCategory("REC_640_320")
+                .setCallforward("http://localhost:8083/ads/callforward")
+                .send();
         });
     </script>
 </body>
