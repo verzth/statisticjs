@@ -11,6 +11,8 @@
     <script type="text/javascript">
         $(function () {
             var stats = new Statistic({
+                serverUrl: "HOST_URL",
+                key: "YOUR_KEY"
             });
             stats.createContent()
                 .setAction("impression")
