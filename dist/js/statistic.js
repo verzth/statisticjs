@@ -3,8 +3,8 @@
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function ($, hash) {
-  var $_VERSION = "2.0.0-alpha09";
-  var $_BUILD = 9;
+  var $_VERSION = "2.0.0-alpha10";
+  var $_BUILD = 10;
   var $_COOKIE_NAME = "verzth_stats";
   var $_SESSION_NAME = "verzth_sess";
   var $_ADS_IDENTIFICATION_NAME = 'verzth_pa';
@@ -232,6 +232,31 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return name;
   }
 
+  function getBrowserVersion() {
+    var version = navigator.appVersion.substring(0, 4).trim();
+    var index = -1;
+
+    if ((index = navigator.userAgent.indexOf("MSIE")) !== -1) {
+      version = "MSIE";
+    } else if ((index = navigator.userAgent.indexOf("Firefox")) !== -1) {
+      version = "Firefox";
+    } else if ((index = navigator.userAgent.indexOf("Opera")) !== -1) {
+      version = "Opera";
+    } else if ((index = navigator.userAgent.indexOf("Chrome")) !== -1) {
+      version = "Chrome";
+    } else if ((index = navigator.userAgent.indexOf("Safari")) !== -1) {
+      version = "Safari";
+    }
+
+    if (index !== -1) {
+      var vStr = navigator.userAgent.substring(index);
+      var last = vStr.indexOf(" ");
+      if (last !== -1) version = vStr.substring(vStr.indexOf("/") + 1, last);else version = vStr.substring(vStr.indexOf("/") + 1);
+    }
+
+    return version;
+  }
+
   function createModel() {
     return {
       session_id: getSessionId(),
@@ -246,7 +271,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       device: {
         id: getIdentification(),
         brand: getBrowserName(),
-        version: navigator.appVersion.substring(0, 4).trim(),
+        version: getBrowserVersion(),
         type: "Web",
         os: getOperatingSystem()
       },

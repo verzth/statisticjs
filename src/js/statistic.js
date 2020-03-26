@@ -1,6 +1,6 @@
 (function ($,hash) {
-    var $_VERSION = "2.0.0-alpha09";
-    var $_BUILD = 9;
+    var $_VERSION = "2.0.0-alpha10";
+    var $_BUILD = 10;
 
     var $_COOKIE_NAME = "verzth_stats";
     var $_SESSION_NAME = "verzth_sess";
@@ -210,6 +210,29 @@
         return name;
     }
 
+    function getBrowserVersion() {
+        var version = navigator.appVersion.substring(0, 4).trim();
+        var index = -1;
+        if((index=navigator.userAgent.indexOf("MSIE"))!==-1){
+            version = "MSIE";
+        }else if((index=navigator.userAgent.indexOf("Firefox"))!==-1){
+            version = "Firefox";
+        }else if((index=navigator.userAgent.indexOf("Opera"))!==-1){
+            version = "Opera";
+        }else if((index=navigator.userAgent.indexOf("Chrome")) !==-1){
+            version = "Chrome";
+        }else if((index=navigator.userAgent.indexOf("Safari"))!==-1){
+            version = "Safari";
+        }
+        if(index !== -1){
+            var vStr = navigator.userAgent.substring(index);
+            var last = vStr.indexOf(" ");
+            if (last !== -1) version = vStr.substring(vStr.indexOf("/")+1,last);
+            else version = vStr.substring(vStr.indexOf("/")+1);
+        }
+        return version;
+    }
+
     function createModel() {
         return {
             session_id : getSessionId(),
@@ -224,7 +247,7 @@
             device: {
                 id : getIdentification(),
                 brand : getBrowserName(),
-                version : navigator.appVersion.substring(0, 4).trim(),
+                version : getBrowserVersion(),
                 type : "Web",
                 os : getOperatingSystem(),
             },
