@@ -3,8 +3,8 @@
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function ($, hash) {
-  var $_VERSION = "2.0.0-alpha08";
-  var $_BUILD = 8;
+  var $_VERSION = "2.0.0-alpha09";
+  var $_BUILD = 9;
   var $_COOKIE_NAME = "verzth_stats";
   var $_SESSION_NAME = "verzth_sess";
   var $_ADS_IDENTIFICATION_NAME = 'verzth_pa';
@@ -185,6 +185,53 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return getEZID($_ADS_IDENTIFICATION_NAME);
   }
 
+  function getOperatingSystem() {
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    if (/windows phone/i.test(userAgent)) {
+      return "Windows Phone";
+    }
+
+    if (/android|okhttp/i.test(userAgent)) {
+      return "Android";
+    }
+
+    if (/POSTMAN/.test(userAgent)) {
+      return "POSTMAN";
+    }
+
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+      return "iOS";
+    }
+
+    if (/Mac68K|MacPPC|MacIntel/.test(userAgent) && !window.MSStream) {
+      return "Mac";
+    }
+
+    if (navigator.appVersion.indexOf("Win") !== -1) return "Windows";
+    if (navigator.appVersion.indexOf("X11") !== -1) return "UNIX";
+    if (navigator.appVersion.indexOf("Linux") !== -1) return "Linux";
+    return navigator.platform;
+  }
+
+  function getBrowserName() {
+    var name = navigator.appCodeName;
+
+    if (navigator.userAgent.indexOf("MSIE") !== -1) {
+      name = "MSIE";
+    } else if (navigator.userAgent.indexOf("Firefox") !== -1) {
+      name = "Firefox";
+    } else if (navigator.userAgent.indexOf("Opera") !== -1) {
+      name = "Opera";
+    } else if (navigator.userAgent.indexOf("Chrome") !== -1) {
+      name = "Chrome";
+    } else if (navigator.userAgent.indexOf("Safari") !== -1) {
+      name = "Safari";
+    }
+
+    return name;
+  }
+
   function createModel() {
     return {
       session_id: getSessionId(),
@@ -198,10 +245,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       carrier: "statisticjs:" + $_BUILD + ":v" + $_VERSION,
       device: {
         id: getIdentification(),
-        brand: navigator.appCodeName,
+        brand: getBrowserName(),
         version: navigator.appVersion.substring(0, 4).trim(),
         type: "Web",
-        os: navigator.platform
+        os: getOperatingSystem()
       },
       longitude: null,
       latitude: null,
