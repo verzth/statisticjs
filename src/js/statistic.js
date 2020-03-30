@@ -1,6 +1,6 @@
 (function ($,hash) {
-    var $_VERSION = "2.0.0-alpha10";
-    var $_BUILD = 10;
+    var $_VERSION = "2.0.0-alpha11";
+    var $_BUILD = 11;
 
     var $_COOKIE_NAME = "verzth_stats";
     var $_SESSION_NAME = "verzth_sess";
@@ -244,8 +244,8 @@
             gender : null,
             user_id : null,
             carrier : "statisticjs:"+$_BUILD+":v"+$_VERSION,
+            device_id: getIdentification(),
             device: {
-                id : getIdentification(),
                 brand : getBrowserName(),
                 version : getBrowserVersion(),
                 type : "Web",
