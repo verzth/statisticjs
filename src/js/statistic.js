@@ -1,6 +1,6 @@
 (function ($,hash) {
-    var $_VERSION = "2.0.0-alpha11";
-    var $_BUILD = 11;
+    var $_VERSION = "2.0.0-alpha13";
+    var $_BUILD = 13;
 
     var $_COOKIE_NAME = "verzth_stats";
     var $_SESSION_NAME = "verzth_sess";
@@ -23,12 +23,9 @@
         this.queueModel = [];
 
         if(arguments[0] && typeof arguments[0] === "object"){
-            this.options = extendDefaults(defaults,arguments[0]);
+            this.options = extendDefaults.call(this, defaults,arguments[0]);
             this.options.apiUrl = this.options.serverUrl;
         }else this.options = defaults;
-
-        this.tcx = this.options.tcx;
-        delete this.options.tcx;
 
         initCookie.call(this);
     };
@@ -334,7 +331,6 @@
             };
 
             Statistic.prototype.commit = function () {
-                delete Statistic.prototype.addContent;
                 delete Statistic.prototype.setId;
                 delete Statistic.prototype.setType;
                 delete Statistic.prototype.setCategory;
@@ -461,7 +457,6 @@
             };
 
             Statistic.prototype.commit = function () {
-                delete Statistic.prototype.addEvent;
                 delete Statistic.prototype.setId;
                 delete Statistic.prototype.setType;
                 delete Statistic.prototype.setCategory;

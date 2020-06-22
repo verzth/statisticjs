@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="../dist/js/statistic.bundle.js"></script>
 </head>
 <body>
@@ -14,7 +14,8 @@
                 serverUrl: "HOST_URL",
                 key: "YOUR_KEY"
             });
-            stats.createContent()
+            stats.makeContent();
+            stats.addContent()
                 .setAction("impression")
                 .setId(1)
                 .setType("image")

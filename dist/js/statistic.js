@@ -3,8 +3,8 @@
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function ($, hash) {
-  var $_VERSION = "2.0.0-alpha11";
-  var $_BUILD = 11;
+  var $_VERSION = "2.0.0-alpha13";
+  var $_BUILD = 13;
   var $_COOKIE_NAME = "verzth_stats";
   var $_SESSION_NAME = "verzth_sess";
   var $_ADS_IDENTIFICATION_NAME = 'verzth_pa';
@@ -23,12 +23,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     this.queueModel = [];
 
     if (arguments[0] && _typeof(arguments[0]) === "object") {
-      this.options = extendDefaults(defaults, arguments[0]);
+      this.options = extendDefaults.call(this, defaults, arguments[0]);
       this.options.apiUrl = this.options.serverUrl;
     } else this.options = defaults;
 
-    this.tcx = this.options.tcx;
-    delete this.options.tcx;
     initCookie.call(this);
   };
 
@@ -369,7 +367,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       };
 
       Statistic.prototype.commit = function () {
-        delete Statistic.prototype.addContent;
         delete Statistic.prototype.setId;
         delete Statistic.prototype.setType;
         delete Statistic.prototype.setCategory;
@@ -513,7 +510,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       };
 
       Statistic.prototype.commit = function () {
-        delete Statistic.prototype.addEvent;
         delete Statistic.prototype.setId;
         delete Statistic.prototype.setType;
         delete Statistic.prototype.setCategory;
